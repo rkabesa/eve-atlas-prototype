@@ -1,0 +1,15 @@
+{
+  "short_name": "Eve",
+  "name": "Eve",
+  "icons": [
+    {
+      "src": "eve_logo_icon_192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}

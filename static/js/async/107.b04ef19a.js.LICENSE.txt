@@ -1,0 +1,61 @@
+/*! Bundled license information:
+
+bippy/dist/rdt-hook-5L_ky0r0.js:
+  (**
+   * @license bippy
+   *
+   * Copyright (c) Aiden Bai
+   *
+   * This source code is licensed under the MIT license found in the
+   * LICENSE file in the root directory of this source tree.
+   *)
+
+bippy/dist/core-U1d648PH.js:
+  (**
+   * @license bippy
+   *
+   * Copyright (c) Aiden Bai
+   *
+   * This source code is licensed under the MIT license found in the
+   * LICENSE file in the root directory of this source tree.
+   *)
+
+bippy/dist/source.js:
+  (**
+   * @license bippy
+   *
+   * Copyright (c) Aiden Bai
+   *
+   * This source code is licensed under the MIT license found in the
+   * LICENSE file in the root directory of this source tree.
+   *)
+
+bippy/dist/install-hook-only-CgvoC7AQ.js:
+  (**
+   * @license bippy
+   *
+   * Copyright (c) Aiden Bai
+   *
+   * This source code is licensed under the MIT license found in the
+   * LICENSE file in the root directory of this source tree.
+   *)
+
+bippy/dist/index.js:
+  (**
+   * @license bippy
+   *
+   * Copyright (c) Aiden Bai
+   *
+   * This source code is licensed under the MIT license found in the
+   * LICENSE file in the root directory of this source tree.
+   *)
+*/
+
+/**
+ * @license MIT
+ *
+ * Copyright (c) 2025 Aiden Bai
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
