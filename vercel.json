@@ -1,4 +1,7 @@
 {
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }],
+  "rewrites": [
+    { "source": "/mockups/(.*)", "destination": "/mockups/$1" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ],
   "redirects": [{ "source": "/", "destination": "/atlas", "statusCode": 302 }]
 }

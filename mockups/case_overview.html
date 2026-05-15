@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Case Overview — P1 + P2 audit recommendations</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+  :root {
+    --bg-page: #F5F2EC;
+    --bg-card: #FFFFFF;
+    --bg-nav: #FBFAF6;
+    --ink: #111827;
+    --ink-soft: #374151;
+    --label: #6B7280;
+    --label-soft: #9CA3AF;
+    --line: #E5E2D8;
+    --line-soft: #EDEAE0;
+    --accent: #1F2937;
+    --chip-green-bg: #D1FAE5;
+    --chip-green-ink: #047857;
+    --chip-p2-bg: #FEF3C7;
+    --chip-p2-ink: #92400E;
+    --chip-auditor-bg: #EDE9FE;
+    --chip-auditor-ink: #5B21B6;
+    --chip-derived-bg: #DBEAFE;
+    --chip-derived-ink: #1E40AF;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI",
+                 Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg-page);
+    color: var(--ink);
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  /* TOP BAR */
+  .topbar {
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--line);
+    padding: 10px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 52px;
+  }
+  .crumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+  .crumb .sep { color: var(--label-soft); }
+  .crumb .home {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--ink-soft);
+  }
+  .crumb b { font-weight: 500; color: var(--ink); }
+  .topbar-actions { display: flex; align-items: center; gap: 10px; }
+  .pill-btn {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+  .pill-btn.primary {
+    background: #1F2937;
+    color: #FFF;
+    border-color: #1F2937;
+  }
+
+  /* LAYOUT */
+  .layout { display: grid; grid-template-columns: 240px 1fr 360px; min-height: calc(100vh - 52px); }
+
+  /* LEFT NAV */
+  .leftnav {
+    background: var(--bg-nav);
+    border-right: 1px solid var(--line);
+    padding: 14px 10px;
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+  .leftnav .nav-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 4px 8px 10px;
+    font-size: 12px;
+    color: var(--label);
+  }
+  .leftnav-list { list-style: none; padding: 0; margin: 0; }
+  .leftnav-list li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: default;
+    color: var(--ink-soft);
+  }
+  .leftnav-list li.active { background: #ECE7DA; font-weight: 600; color: var(--ink); }
+  .leftnav-list li .ico { width: 14px; color: var(--label); display: inline-block; text-align: center; }
+  .leftnav-list .sub li { padding-left: 28px; font-size: 12.5px; color: var(--label); }
+
+  /* TAB BAR */
+  .tabbar {
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--line);
+    padding: 0 22px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    overflow-x: auto;
+  }
+  .tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 12px;
+    font-size: 13px;
+    border-bottom: 2px solid transparent;
+    color: var(--ink-soft);
+  }
+  .tab.active { color: var(--ink); border-bottom-color: var(--ink); font-weight: 500; }
+  .tab .x { color: var(--label-soft); font-size: 11px; }
+  .tab .dot { width: 14px; display: inline-block; text-align: center; color: var(--label); }
+
+  /* MAIN */
+  .main { padding: 22px 26px 80px; max-width: 980px; }
+  .page-title { font-size: 18px; font-weight: 600; margin: 0 0 16px; }
+
+  /* CARDS */
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 22px;
+    margin-bottom: 14px;
+  }
+  .card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+  .card-section-label {
+    font-size: 11.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    color: var(--label);
+    font-weight: 600;
+  }
+  .edit-btn {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 12px;
+    color: var(--ink-soft);
+    cursor: default;
+  }
+  .add-btn {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 5px 11px;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+  }
+
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px 32px;
+  }
+  .grid-1 { display: grid; grid-template-columns: 1fr; gap: 18px; }
+  .field-label {
+    font-size: 12.5px;
+    color: var(--label);
+    margin-bottom: 3px;
+  }
+  .field-value {
+    font-size: 14px;
+    color: var(--ink);
+  }
+  .field-value.empty { color: var(--label-soft); }
+  .field-value.muted { color: var(--ink-soft); }
+  .field {
+    display: flex;
+    flex-direction: column;
+  }
+  .field .row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* CHIPS / BADGES */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 1px 9px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 1.5;
+  }
+  .chip.sol-green { background: var(--chip-green-bg); color: var(--chip-green-ink); }
+  .chip.p2 { background: var(--chip-p2-bg); color: var(--chip-p2-ink); }
+  .chip.auditor { background: var(--chip-auditor-bg); color: var(--chip-auditor-ink); }
+  .chip.derived { background: var(--chip-derived-bg); color: var(--chip-derived-ink); }
+
+  .field-meta {
+    margin-top: 2px;
+    font-size: 11px;
+    color: var(--label-soft);
+  }
+  .field-pill-row { display: flex; align-items: center; gap: 6px; }
+
+  /* INSET CARD (e.g. CLIENT inside Case Overview) */
+  .inset-card {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 16px 18px;
+  }
+
+  /* SUB-CARD HEADER (for Damages economic vs non-economic) */
+  .sub-card-head {
+    font-size: 11.5px;
+    color: var(--label);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+  .divider {
+    border-top: 1px solid var(--line-soft);
+    margin: 18px 0 14px;
+  }
+
+  /* RIGHT PANEL */
+  .rightpanel {
+    background: var(--bg-card);
+    border-left: 1px solid var(--line);
+    display: flex;
+    flex-direction: column;
+  }
+  .rightpanel-head {
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--line);
+  }
+  .rightpanel-head .ttl { font-size: 13px; color: var(--ink); font-weight: 500; }
+  .rightpanel-body { flex: 1; padding: 18px; color: var(--label-soft); font-size: 13px; }
+  .rightpanel-input {
+    border-top: 1px solid var(--line);
+    padding: 12px 16px;
+  }
+  .rightpanel-input .talkbox {
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 10px 12px;
+    font-size: 13px;
+    color: var(--label);
+  }
+  .rightpanel-input .actions {
+    display: flex; gap: 8px; margin-top: 8px;
+    font-size: 12px;
+    color: var(--label-soft);
+  }
+  .rightpanel-input .actions span {
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 3px 8px;
+  }
+
+  /* AUDIT NOTE BANNER */
+  .audit-note {
+    background: #FFFBEB;
+    border: 1px solid #F5C465;
+    border-left-width: 4px;
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-size: 12.5px;
+    color: #78350F;
+    margin-bottom: 14px;
+  }
+  .audit-note b { color: #6B3905; }
+
+  /* LEGEND */
+  .legend {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-bottom: 14px;
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    font-size: 12px;
+    color: var(--ink-soft);
+  }
+  .legend-item { display: inline-flex; align-items: center; gap: 6px; }
+
+  /* COLLAPSED SECTION */
+  details.card {
+    padding: 0;
+  }
+  details.card > summary {
+    padding: 14px 22px;
+    cursor: default;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--label);
+    font-size: 11.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+  }
+  details.card > summary::after {
+    content: "▾";
+    color: var(--label-soft);
+    font-size: 11px;
+  }
+  details.card[open] > summary { border-bottom: 1px solid var(--line-soft); margin-bottom: 0; }
+  details.card[open] > summary::after { content: "▴"; }
+  details.card > .details-body { padding: 16px 22px 20px; }
+
+  @media (max-width: 1100px) {
+    .layout { grid-template-columns: 220px 1fr; }
+    .rightpanel { display: none; }
+  }
+  @media (max-width: 800px) {
+    .layout { grid-template-columns: 1fr; }
+    .leftnav { display: none; }
+    .grid-2 { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="crumb">
+    <span class="home">▣</span>
+    <span class="home">Home</span>
+    <span class="sep">›</span>
+    <span>Matters</span>
+    <span class="sep">›</span>
+    <b>Adams v. Baker</b>
+    <span class="sep">···</span>
+  </div>
+  <div class="topbar-actions">
+    <span class="pill-btn">⌖ Team</span>
+    <span class="pill-btn primary">Create Agent</span>
+  </div>
+</div>
+
+<div class="layout">
+
+  <!-- LEFT NAV -->
+  <nav class="leftnav">
+    <div class="nav-head"><span>Case Knowledge</span><span>«</span></div>
+    <ul class="leftnav-list">
+      <li class="active"><span class="ico">▤</span> Case Overview</li>
+      <li><span class="ico">⏱</span> Deadlines</li>
+      <li><span class="ico">≣</span> Activity</li>
+      <li><span class="ico">✚</span> Medical
+        <ul class="sub" style="list-style:none;padding:0;margin:6px 0 0;width:100%">
+          <li>Providers</li>
+          <li>Visits</li>
+          <li>ICD Codes</li>
+          <li>Bad Facts</li>
+          <li>Liens</li>
+          <li>PIP &amp; MedPay</li>
+        </ul>
+      </li>
+      <li><span class="ico">◌</span> Insurance</li>
+      <li><span class="ico">⊙</span> Parties</li>
+      <li><span class="ico">$</span> Expenses</li>
+      <li><span class="ico">⚖</span> Negotiation</li>
+      <li><span class="ico">⚖</span> Settlement &amp; Disbursal</li>
+      <li><span class="ico">▢</span> Files</li>
+    </ul>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- Tab bar -->
+    <div class="tabbar" style="margin:0 -26px 18px; padding-left: 26px;">
+      <span class="tab"><span class="dot">✚</span>Medical<span class="x">✕</span></span>
+      <span class="tab"><span class="dot">◌</span>Insurance<span class="x">✕</span></span>
+      <span class="tab"><span class="dot">⊙</span>Parties<span class="x">✕</span></span>
+      <span class="tab"><span class="dot">⏱</span>Deadlines<span class="x">✕</span></span>
+      <span class="tab active"><span class="dot">▤</span>Case Overview<span class="x">✕</span></span>
+    </div>
+
+    <h1 class="page-title">Case Overview</h1>
+
+    <div class="audit-note">
+      <b>Audit mockup —</b> Case Overview if we ship all P1 + P2 recommendations from the data-model audit. New cards beyond the current staging design: Damages, Coverage Rollups, Litigation, Lifecycle, Workflow Status (Auditor-derived). Damages lives here, not under Medical.
+    </div>
+
+    <div class="legend">
+      <div class="legend-item"><span class="chip sol-green">P1</span> Atlas matter data, in P0-A</div>
+      <div class="legend-item"><span class="chip p2">P2</span> Deferred to Phase 2</div>
+      <div class="legend-item"><span class="chip auditor">Auditor</span> Auditor-derived; read-only here</div>
+      <div class="legend-item"><span class="chip derived">Derived</span> Computed from another entity</div>
+    </div>
+
+    <!-- CASE DETAILS (matches existing staging) -->
+    <section class="card">
+      <div class="card-head">
+        <span class="card-section-label">Case Details</span>
+        <span class="edit-btn">Edit</span>
+      </div>
+      <div class="grid-2">
+        <div class="field">
+          <div class="field-label">Practice Area</div>
+          <div class="field-value">Personal Injury</div>
+        </div>
+        <div class="field">
+          <div class="field-label">Case Type</div>
+          <div class="field-value">Auto Accident</div>
+        </div>
+        <div class="field">
+          <div class="field-label">Stage</div>
+          <div class="field-value row">Negotiation <span class="chip auditor">Auditor</span></div>
+        </div>
+        <div class="field">
+          <div class="field-label">Substage</div>
+          <div class="field-value row">Pre-Suit Demand <span class="chip auditor">Auditor</span></div>
+        </div>
+        <div class="field">
+          <div class="field-label">Date Opened</div>
+          <div class="field-value">11/29/24</div>
+        </div>
+        <div class="field">
+          <div class="field-label">Date of Incident</div>
+          <div class="field-value">3/12/24</div>
+        </div>
+        <div class="field">
+          <div class="field-label">Jurisdiction</div>
+          <div class="field-value">Cook County, IL</div>
+        </div>
+        <div class="field">
+          <div class="field-label">Time of Incident</div>
+          <div class="field-value">2:30 PM</div>
+        </div>
+        <div class="field">
+          <div class="field-label">Owner / Lead Attorney</div>
+          <div class="field-value">Sarah Chen</div>
+        </div>
+        <div class="field">
+          <div class="field-label">Status History</div>
+          <div class="field-value muted">5 lanes · 32 entries</div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="grid-1">
+        <div class="field">
+          <div class="field-label">Overview</div>
+          <div class="field-value">Rear-end collision; client stopped at red light when defendant struck from behind. Defendant cited. Client experienced lumbar pain onset within 48 hours; underwent imaging and PT. Surgical consult pending.</div>
+        </div>
+        <div class="field">
+          <div class="field-label">Statute of Limitations</div>
+          <div class="field-value row">
+            March 12, 2026 <span class="chip sol-green">~10mo remaining</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- INCIDENT (new fields from audit) -->
+    <section class="card">
+      <div class="card-head">
+        <span class="card-section-label">Incident — additional facts</span>
+        <span class="edit-btn">Edit</span>
+      </div>
+      <div class="grid-2">
+        <div class="field">
+          <div class="field-label">Police Present</div>
+          <div class="field-value">Yes — CPD Report #2024-038194</div>
+        </div>
+        <div class="field">
+          <div class="field-label">Working at Time of Accident</div>
+          <div class="field-value">No</div>
+        </div>
+        <div class="field">
+          <div class="field-label">Plaintiff Age Range</div>
+          <div class="field-value row">Adult (25-64) <span class="chip auditor">Auditor</span></div>
+        </div>
+        <div class="field">
+          <div class="field-label">Significant Injury Indicator</div>
+          <div class="field-value row muted">Yes <span class="chip p2">P2</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LIABILITY -->
+    <section class="card">
+      <div class="card-head">
+        <span class="card-section-label">Liability</span>
+        <span class="edit-btn">Edit</span>
+      </div>
+      <div class="grid-2">
+        <div class="field">
+          <div class="field-label">Liability Status</div>
+          <div class="field-value row muted">Clear <span class="chip p2">P2</span> <span class="chip auditor">Auditor</span></div>
+        </div>
+        <div class="field">
+          <div class="field-label">Negligence Theory</div>
+          <div class="field-value row muted">Standard rear-end negligence <span class="chip p2">P2</span></div>
+        </div>
+        <div class="field">
+          <div class="field-label">Comparative Fault Risk</div>
+          <div class="field-value row muted">None <span class="chip p2">P2</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DAMAGES (the answer to Rafi's question) -->
+    <section class="card" style="box-shadow: 0 0 0 1px #F5C465;">
+      <div class="card-head">
+        <span class="card-section-label" style="color:#92400E">Damages Claimed</span>
+        <span class="edit-btn">Edit</span>
+      </div>
+
+      <div class="grid-2">
+        <div class="field">
+          <div class="field-label">Damage Type</div>
+          <div class="field-value">Lost Wages · Pain &amp; Suffering · Future Medical · Other Economic</div>
+        </div>
+        <div class="field">
+          <div class="field-label">Total Damage Amount</div>
+          <div class="field-value">$185,500</div>
+          <div class="field-meta">Computed from rows below</div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+      <div class="sub-card-head">Economic Damages</div>
+      <div class="grid-2">
+        <div class="field">
+          <div class="field-label">Lost Wages Details</div>
+          <div class="field-value">60 days off work at $533/day = $32,000. Returned to part-time 2024-06-15.</div>
+        </div>
+        <div class="field">
+          <div class="field-label">Other Economic Damages</div>
+          <div class="field-value">Rental car $1,200 · PT transport $850 · Property damage $6,450</div>
+        </div>
+        <div class="field">
+          <div class="field-label">Anticipated Treatment (forecast)</div>
+          <div class="field-value row">Lumbar fusion + 6mo PT, est. $45,000 <span class="chip auditor">Auditor</span></div>
+        </div>
+        <div class="field">
+          <div class="field-label">Lost Wages Amount</div>
+          <div class="field-value row muted">$32,000 <span class="chip p2">P2</span> <span class="chip auditor">Auditor</span></div>
+        </div>
+        <div class="field">
+          <div class="field-label">Lost Wages Claimed</div>
+          <div class="field-value row muted">Yes <span class="chip p2">P2</span></div>
+        </div>
+        <div class="field">
+          <div class="field-label">Employment Status</div>
+          <div class="field-value row muted">Employed pre-incident; partial return-to-work <span class="chip p2">P2</span></div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+      <div class="sub-card-head">Non-Economic Damages</div>
+      <div class="grid-1">
+        <div class="field">
+          <div class="field-label">Pain &amp; Suffering / Loss of Consortium</div>
+          <div class="field-value">Persistent lumbar pain limiting daily activities; client describes inability to play with two young children. Loss of consortium claim pending spouse statement.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- COVERAGE ROLLUPS (computed from Insurance) -->
+    <section class="card">
+      <div class="card-head">
+        <span class="card-section-label">Coverage Rollups</span>
+        <span class="edit-btn">View Policies</span>
+      </div>
+      <div class="grid-2">
+        <div class="field">
+          <div class="field-label">Total Liability Coverage</div>
+          <div class="field-value row">$100,000 / $300,000 <span class="chip derived">Derived</span></div>
+        </div>
+        <div class="field">
+          <div class="field-label">Total UM/UIM Coverage</div>
+          <div class="field-value row">$250,000 / $500,000 <span class="chip derived">Derived</span></div>
+        </div>
+        <div class="field">
+          <div class="field-label">Total MedPay Coverage</div>
+          <div class="field-value row">$5,000 <span class="chip derived">Derived</span></div>
+        </div>
+        <div class="field">
+          <div class="field-label">Total PIP Coverage</div>
+          <div class="field-value row">$10,000 <span class="chip derived">Derived</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LITIGATION -->
+    <section class="card">
+      <div class="card-head">
+        <span class="card-section-label">Litigation</span>
+        <span class="edit-btn">Edit</span>
+      </div>
+      <div class="grid-2">
+        <div class="field">
+          <div class="field-label">Filing Date</div>
+          <div class="field-value empty">— (pre-suit)</div>
+        </div>
+        <div class="field">
+          <div class="field-label">Court Name</div>
+          <div class="field-value empty">—</div>
+        </div>
+        <div class="field">
+          <div class="field-label">Docket Number</div>
+          <div class="field-value empty">—</div>
+        </div>
+      </div>
+      <div class="field-meta" style="margin-top:8px">Deadlines (SOL, SOP, Trial, Discovery) live in Deadlines &gt; SOL/SOP/Additional</div>
+    </section>
+
+    <!-- LIFECYCLE -->
+    <section class="card">
+      <div class="card-head">
+        <span class="card-section-label">Lifecycle</span>
+        <span class="edit-btn">Edit</span>
+      </div>
+      <div class="grid-2">
+        <div class="field">
+          <div class="field-label">Closed At / By / Reason</div>
+          <div class="field-value empty">— (case still active)</div>
+        </div>
+        <div class="field">
+          <div class="field-label">External CRM ID</div>
+          <div class="field-value muted">CRM-4827</div>
+        </div>
+        <div class="field">
+          <div class="field-label">External DMS ID</div>
+          <div class="field-value muted">DMS-99102</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- WORKFLOW STATUS (Auditor-derived) -->
+    <section class="card">
+      <div class="card-head">
+        <span class="card-section-label">Workflow Status <span style="text-transform:none;font-weight:400;font-size:12px;color:#9CA3AF;letter-spacing:0">— Auditor-derived</span></span>
+        <span class="edit-btn">Open Auditor</span>
+      </div>
+      <div class="grid-2">
+        <div class="field">
+          <div class="field-label">Disbursement Status</div>
+          <div class="field-value row">Pre-disbursement <span class="chip auditor">Auditor</span></div>
+        </div>
+        <div class="field">
+          <div class="field-label">Settlement Checks Status</div>
+          <div class="field-value row">Not sent <span class="chip auditor">Auditor</span></div>
+        </div>
+        <div class="field">
+          <div class="field-label">Release Status</div>
+          <div class="field-value row">Not sent <span class="chip auditor">Auditor</span></div>
+        </div>
+        <div class="field">
+          <div class="field-label">Reductions Status</div>
+          <div class="field-value row">Not negotiated <span class="chip auditor">Auditor</span></div>
+        </div>
+        <div class="field">
+          <div class="field-label">Overall Lien Resolution</div>
+          <div class="field-value row">In progress · 3 liens open <span class="chip auditor">Auditor</span></div>
+        </div>
+        <div class="field">
+          <div class="field-label">Client Review Eligibility</div>
+          <div class="field-value row">Not yet <span class="chip auditor">Auditor</span></div>
+        </div>
+        <div class="field">
+          <div class="field-label">SSDI</div>
+          <div class="field-value row">No claim <span class="chip auditor">Auditor</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MASS TORT (collapsed by default) -->
+    <details class="card">
+      <summary>Mass Tort Classifiers <span style="margin-left:8px;text-transform:none;font-weight:400;color:#9CA3AF;letter-spacing:0">10 fields · Auditor · click to expand</span></summary>
+      <div class="details-body">
+        <div class="grid-2">
+          <div class="field"><div class="field-label">Asbestos</div><div class="field-value row">No <span class="chip auditor">Auditor</span></div></div>
+          <div class="field"><div class="field-label">Baby Formula</div><div class="field-value row">No <span class="chip auditor">Auditor</span></div></div>
+          <div class="field"><div class="field-label">Bard PowerPort</div><div class="field-value row">No <span class="chip auditor">Auditor</span></div></div>
+          <div class="field"><div class="field-label">Depo-Provera</div><div class="field-value row">No <span class="chip auditor">Auditor</span></div></div>
+          <div class="field"><div class="field-label">General Medical</div><div class="field-value row">No <span class="chip auditor">Auditor</span></div></div>
+          <div class="field"><div class="field-label">GLP-1</div><div class="field-value row">No <span class="chip auditor">Auditor</span></div></div>
+          <div class="field"><div class="field-label">Hair Relaxer</div><div class="field-value row">No <span class="chip auditor">Auditor</span></div></div>
+          <div class="field"><div class="field-label">Sickle Cell</div><div class="field-value row">No <span class="chip auditor">Auditor</span></div></div>
+          <div class="field"><div class="field-label">Suboxone</div><div class="field-value row">No <span class="chip auditor">Auditor</span></div></div>
+          <div class="field"><div class="field-label">Talcum Powder</div><div class="field-value row">No <span class="chip auditor">Auditor</span></div></div>
+        </div>
+      </div>
+    </details>
+
+  </main>
+
+  <!-- RIGHT PANEL -->
+  <aside class="rightpanel">
+    <div class="rightpanel-head">
+      <span class="ttl">New Session</span>
+      <span style="color:#9CA3AF;font-size:12px">⌖ ⏱</span>
+    </div>
+    <div class="rightpanel-body">&nbsp;</div>
+    <div class="rightpanel-input">
+      <div class="talkbox">Talk to Eve</div>
+      <div class="actions">
+        <span>⊙ Agents</span>
+        <span style="color:#B91C1C">⊘ Upload Matter Context 0</span>
+      </div>
+    </div>
+  </aside>
+
+</div>
+</body>
+</html>
